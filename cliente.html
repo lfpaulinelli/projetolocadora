@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locadora Luz - Aluguer de Carros em Luz, MG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3)), url('https://placehold.co/1920x1080/1a202c/ffffff?text=Carro+na+Estrada');
+            background-size: cover;
+            background-position: center;
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        .modal {
+            display: none; /* Oculto por defeito */
+        }
+        .modal.show {
+            display: flex; /* Exibido quando a classe 'show' é adicionada */
+        }
+        [x-cloak] { display: none !important; }
+    </style>
+     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header id="main-header" class="bg-white shadow-md sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="nav-link text-2xl font-bold text-blue-600 flex items-center">
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                Locadora Luz
+            </a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="nav-link text-gray-600 hover:text-blue-600 transition">Início</a>
+                <a href="#fleet" class="nav-link text-gray-600 hover:text-blue-600 transition">A Nossa Frota</a>
+                <a href="#faq" class="nav-link text-gray-600 hover:text-blue-600 transition">Como Alugar</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:text-blue-600 transition">Contacto</a>
+            </nav>
+            <div class="hidden md:flex items-center">
+                 <button id="login-btn" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <i class="fa-solid fa-user mr-2"></i>Login
+                </button>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-600 focus:outline-none">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="nav-link block py-2 text-gray-600 hover:text-blue-600">Início</a>
+            <a href="#fleet" class="nav-link block py-2 text-gray-600 hover:text-blue-600">A Nossa Frota</a>
+            <a href="#faq" class="nav-link block py-2 text-gray-600 hover:text-blue-600">Como Alugar</a>
+            <a href="#contact" class="nav-link block py-2 text-gray-600 hover:text-blue-600">Contacto</a>
+            <button id="login-btn-mobile" class="mt-4 w-full bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                <i class="fa-solid fa-user mr-2"></i>Login
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <!-- Hero Section -->
+            <section class="hero-bg text-white">
+                <div class="container mx-auto px-6 py-24 md:py-32 text-center md:text-left">
+                    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4">Aluguer de Carros em Luz, MG</h1>
+                    <p class="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">A liberdade de explorar a região com o carro perfeito para si. Processo fácil, rápido e sem burocracia.</p>
+                    
+                    <!-- Booking Form -->
+                    <div class="bg-white p-6 md:p-8 rounded-xl shadow-2xl max-w-4xl mx-auto md:mx-0 text-gray-800">
+                         <form id="booking-form-home" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                            <div class="md:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="pickup-date" class="block text-sm font-medium mb-1">Data de Levantamento</label>
+                                    <input type="date" id="pickup-date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                <div>
+                                    <label for="return-date" class="block text-sm font-medium mb-1">Data de Devolução</label>
+                                    <input type="date" id="return-date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                                </div>
+                                 <div>
+                                    <label for="category-select-home" class="block text-sm font-medium mb-1">Categoria (Opcional)</label>
+                                    <select id="category-select-home" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                        <option value="">Todas</option>
+                                        <!-- Categorias inseridas via JS -->
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold p-3 rounded-lg hover:bg-blue-700 transition text-lg h-full">
+                                <i class="fas fa-search mr-2"></i>Procurar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Featured Fleet Section -->
+            <section class="py-16 md:py-24">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-12">
+                         <h2 class="text-3xl md:text-4xl font-bold text-gray-900">A Nossa Frota</h2>
+                        <p class="text-lg text-gray-600 mt-2">Veículos para todas as necessidades e ocasiões.</p>
+                    </div>
+                    <div id="featured-fleet-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Car Cards serão inseridos aqui -->
+                    </div>
+                    <div class="text-center mt-12">
+                        <a href="#fleet" class="nav-link bg-gray-800 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-900 transition-all duration-300 transform hover:scale-105">
+                            Ver Frota Completa
+                        </a>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- How it Works Section -->
+            <section id="faq" class="bg-gray-100 py-16 md:py-24">
+                 <div class="container mx-auto px-6">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Alugar é Simples</h2>
+                        <p class="text-lg text-gray-600 mt-2">Siga apenas 3 passos para ter o seu carro.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                               <i class="fas fa-car-side fa-2x"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">1. Escolha o Veículo</h3>
+                            <p class="text-gray-600">Navegue na nossa frota, filtre por categoria e encontre o carro ideal para a sua viagem.</p>
+                        </div>
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">2. Reserve as Datas</h3>
+                            <p class="text-gray-600">Selecione as datas de levantamento e devolução e confirme a sua reserva online em poucos minutos.</p>
+                        </div>
+                         <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-key fa-2x"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2">3. Levante o Carro</h3>
+                            <p class="text-gray-600">Apresente os seus documentos na nossa loja em Luz e saia a conduzir. Simples assim!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Fleet Page -->
+        <div id="fleet" class="page">
+             <section class="py-12 md:py-20">
+                <div class="container mx-auto px-6">
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">A Nossa Frota</h1>
+                    <p class="text-lg text-gray-600 mb-8">Encontre o veículo perfeito para a sua necessidade.</p>
+                    
+                    <!-- Filters -->
+                    <div class="mb-8">
+                        <label for="category-filter" class="font-semibold mr-4">Filtrar por Categoria:</label>
+                        <div id="category-filter-buttons" class="inline-flex rounded-lg shadow-sm" role="group">
+                             <!-- Botões de filtro inseridos aqui -->
+                        </div>
+                    </div>
+                    
+                    <div id="full-fleet-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Car Cards serão inseridos aqui -->
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Car Detail Page -->
+        <div id="detail" class="page">
+             <section class="py-12 md:py-20">
+                <div id="car-detail-content" class="container mx-auto px-6">
+                    <!-- Detalhes do carro inseridos aqui -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Section (parte do footer, mas pode ser uma página) -->
+        <div id="contact" class="page">
+            <section class="py-16 md:py-24 bg-gray-100">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Entre em Contacto</h2>
+                    <p class="text-lg text-gray-600 mt-2 mb-8">Tem alguma dúvida? Fale connosco!</p>
+                    <div class="bg-white max-w-lg mx-auto p-8 rounded-lg shadow-lg text-left">
+                        <p class="flex items-center text-lg mb-4"><i class="fas fa-phone fa-fw mr-4 text-blue-600"></i> (35) 99876-5432</p>
+                        <p class="flex items-center text-lg mb-4"><i class="fas fa-envelope fa-fw mr-4 text-blue-600"></i> contato@locadoraluz.com.br</p>
+                        <p class="flex items-start text-lg"><i class="fas fa-map-marker-alt fa-fw mr-4 text-blue-600 mt-1"></i> Rua das Acácias, 123 - Centro, Luz - MG</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Locadora Luz</h3>
+                    <p class="text-gray-400">A sua melhor opção de aluguer de carros em Luz e região. Qualidade e confiança que pode sentir.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="nav-link text-gray-400 hover:text-white">Início</a></li>
+                        <li><a href="#fleet" class="nav-link text-gray-400 hover:text-white">Frota</a></li>
+                        <li><a href="#faq" class="nav-link text-gray-400 hover:text-white">Como Alugar</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Termos e Condições</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Siga-nos</h3>
+                    <div class="flex space-x-4 justify-center md:justify-start">
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500">
+                <p>&copy; 2025 Locadora Luz. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal fixed inset-0 bg-black bg-opacity-60 items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md relative" x-data="{ tab: 'login' }" @click.away="document.getElementById('login-modal').classList.remove('show')">
+            <button @click="document.getElementById('login-modal').classList.remove('show')" class="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+            <div class="border-b">
+                 <nav class="flex">
+                    <button @click="tab = 'login'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'login' }" class="flex-1 p-4 font-semibold text-gray-500 hover:text-blue-500 focus:outline-none">Entrar</button>
+                    <button @click="tab = 'register'" :class="{ 'border-b-2 border-blue-600 text-blue-600': tab === 'register' }" class="flex-1 p-4 font-semibold text-gray-500 hover:text-blue-500 focus:outline-none">Registar</button>
+                </nav>
+            </div>
+           
+            <!-- Login Form -->
+            <div x-show="tab === 'login'" class="p-8" x-cloak>
+                 <h3 class="text-xl font-bold mb-6 text-center">Aceda à sua Conta</h3>
+                 <form>
+                    <div class="mb-4">
+                        <label for="login-email" class="block text-gray-700 mb-1">Email</label>
+                        <input type="email" id="login-email" class="w-full p-3 border rounded-lg" placeholder="seu@email.com">
+                    </div>
+                    <div class="mb-6">
+                        <label for="login-password" class="block text-gray-700 mb-1">Palavra-passe</label>
+                        <input type="password" id="login-password" class="w-full p-3 border rounded-lg" placeholder="********">
+                    </div>
+                     <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700">Entrar</button>
+                 </form>
+            </div>
+            <!-- Register Form -->
+             <div x-show="tab === 'register'" class="p-8" x-cloak>
+                 <h3 class="text-xl font-bold mb-6 text-center">Crie a sua Conta</h3>
+                 <form>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-1">Nome Completo</label>
+                        <input type="text" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-1">Email</label>
+                        <input type="email" class="w-full p-3 border rounded-lg">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-1">Crie uma Palavra-passe</label>
+                        <input type="password" class="w-full p-3 border rounded-lg">
+                    </div>
+                     <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700">Criar Conta</button>
+                 </form>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ---------- DADOS MOCK (SIMULAÇÃO DE BASE DE DADOS) ----------
+    const db = {
+        vehicles: [
+            { id: 1, model: 'Fiat Mobi', plate: 'QWJ-1234', category: 'Popular', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjM2OTU5L0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjgyNDQ2NjgwMDQzLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 99.90, features: ['Ar Condicionado', '4 Portas', 'Direção Hidráulica', 'Câmbio Manual'] },
+            { id: 2, model: 'Hyundai HB20', plate: 'XYZ-5678', category: 'Popular', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjY1NDUwL0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjg5NzgwODg2OTYzLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 110.50, features: ['Ar Condicionado', '4 Portas', 'Direção Elétrica', 'Multimédia'] },
+            { id: 4, model: 'Jeep Renegade', plate: 'DEF-5432', category: 'SUV', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjU0MzQzL0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjg1NjQ4NDM4MDgzLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 179.90, features: ['Ar Condicionado', '4 Portas', 'Câmbio Automático', 'Teto Solar'] },
+            { id: 5, model: 'Fiat Toro', plate: 'GHI-1098', category: 'Pick-up', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjgyOTUzL0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjkzNDMxNjQ3ODYzLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 199.90, features: ['Ar Condicionado', '4 Portas', 'Diesel 4x4', 'Automático'] },
+            { id: 6, model: 'Toyota Corolla', plate: 'JKL-7654', category: 'Sedan Médio', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjc2ODMwL0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjkyMDQ2MDk1NzIyLmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 149.90, features: ['Ar Condicionado', '4 Portas', 'Câmbio Automático', 'Bancos de Couro'] },
+            { id: 7, model: 'Fiat Strada', plate: 'MNO-1234', category: 'Utilitário', status: 'Disponível', image: 'https://images.prd.kavak.io/eyJidWNrZXQiOiJrYXZhay1pbWFnZXMiLCJrZXkiOiJpbWFnZXMvMjgxNTc0L0VYVEVSSU9SLWZyb250U2lkZVBpbG90TmVhci0xNjkzMDgwODU1NDQ2LmpwZWciLCJlZGl0cyI6eyJyZXNpemUiOnsid2lkdGgiOjgwMCwiaGVpZ2h0IjozNDh9fX0=', price: 120.00, features: ['Ar Condicionado', '2 Portas', 'Direção Hidráulica', 'Capota Marítima'] }
+        ],
+        settings: {
+            categories: ['Popular', 'Sedan Médio', 'SUV', 'Pick-up', 'Utilitário']
+        }
+    };
+
+    // ---------- ELEMENTOS DO DOM ----------
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const loginModal = document.getElementById('login-modal');
+    
+    // Grids da frota
+    const featuredFleetGrid = document.getElementById('featured-fleet-grid');
+    const fullFleetGrid = document.getElementById('full-fleet-grid');
+    
+    // Detalhes do carro
+    const carDetailContent = document.getElementById('car-detail-content');
+    
+    // Filtros e Formulários
+    const categoryFilterButtons = document.getElementById('category-filter-buttons');
+    const categorySelectHome = document.getElementById('category-select-home');
+    const bookingFormHome = document.getElementById('booking-form-home');
+
+    // ---------- FUNÇÕES GERAIS ----------
+
+    // Função para criar o card de um carro
+    const createCarCard = (car) => {
+        return `
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transform hover:-translate-y-2 transition-transform duration-300">
+                <img src="${car.image}" alt="Imagem do ${car.model}" class="w-full h-56 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Imagem+Indisponível'">
+                <div class="p-6 flex-grow flex flex-col">
+                    <h3 class="text-xl font-bold mb-1">${car.model}</h3>
+                    <p class="text-sm text-gray-500 mb-4">${car.category}</p>
+                    <div class="mb-4 flex-grow">
+                        <span class="text-3xl font-bold">R$ ${car.price.toFixed(2).replace('.',',')}</span>
+                        <span class="text-gray-600">/ dia</span>
+                    </div>
+                    <button class="nav-link w-full mt-auto bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition" data-page="detail" data-id="${car.id}">
+                        Ver Detalhes e Reservar
+                    </button>
+                </div>
+            </div>
+        `;
+    };
+
+    // Função para renderizar a frota num contentor
+    const renderFleet = (container, cars, filterFn = () => true) => {
+        container.innerHTML = '';
+        const filteredCars = cars.filter(filterFn);
+        if (filteredCars.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-600 col-span-full">Nenhum veículo encontrado para esta categoria.</p>';
+            return;
+        }
+        filteredCars.forEach(car => {
+            container.innerHTML += createCarCard(car);
+        });
+    };
+    
+    // Função para renderizar a página de detalhes
+    const renderCarDetail = (car) => {
+        carDetailContent.innerHTML = `
+            <a href="#fleet" class="nav-link text-blue-600 hover:underline mb-8 inline-block"><i class="fas fa-arrow-left mr-2"></i>Voltar para a frota</a>
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-12">
+                <div class="lg:col-span-3">
+                     <img src="${car.image}" alt="Imagem do ${car.model}" class="w-full rounded-lg shadow-lg" onerror="this.onerror=null;this.src='https://placehold.co/800x600?text=Imagem+Indisponível'">
+                </div>
+                <div class="lg:col-span-2">
+                    <h1 class="text-4xl font-bold mb-2">${car.model}</h1>
+                    <p class="text-lg text-gray-500 mb-6">${car.category}</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-blue-700">R$ ${car.price.toFixed(2).replace('.',',')}</span>
+                        <span class="text-gray-600">/ dia</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Principais Características</h3>
+                    <ul class="list-disc list-inside space-y-2 mb-8">
+                        ${car.features.map(f => `<li class="text-gray-700">${f}</li>`).join('')}
+                    </ul>
+                    <button class="w-full bg-green-500 text-white font-bold py-4 rounded-lg hover:bg-green-600 transition-transform transform hover:scale-105 text-lg">
+                        <i class="fas fa-check-circle mr-2"></i>Reservar Agora
+                    </button>
+                </div>
+            </div>
+        `;
+    };
+    
+    // Função para renderizar filtros
+    const renderFilters = () => {
+        // Botões de filtro na página da frota
+        categoryFilterButtons.innerHTML = '<button data-filter="all" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-gray-200 rounded-l-lg hover:bg-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-500">Todos</button>';
+        db.settings.categories.forEach((cat, index, arr) => {
+            const isLast = index === arr.length - 1;
+            const roundedClass = isLast ? 'rounded-r-lg' : '';
+            categoryFilterButtons.innerHTML += `<button data-filter="${cat}" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b ${isLast ? 'border-r' : 'border-r-0'} border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-500">${cat}</button>`;
+        });
+
+        // Select de categoria na home
+        categorySelectHome.innerHTML = '<option value="">Todas</option>';
+        db.settings.categories.forEach(cat => {
+            categorySelectHome.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
+    };
+
+    // Navegação entre "páginas"
+    const showPage = (pageId, dataId = null) => {
+        pages.forEach(p => p.classList.remove('active'));
+        const page = document.getElementById(pageId);
+        
+        if (page) {
+            page.classList.add('active');
+            window.scrollTo(0, 0); // Rola para o topo
+
+            if (pageId === 'detail' && dataId) {
+                const car = db.vehicles.find(v => v.id == dataId);
+                if(car) renderCarDetail(car);
+            }
+            if (pageId === 'fleet') {
+                renderFleet(fullFleetGrid, db.vehicles);
+            }
+
+        } else {
+            document.getElementById('home').classList.add('active');
+        }
+    };
+    
+    // ---------- EVENT LISTENERS ----------
+    
+    // Navegação principal e de cards
+    document.body.addEventListener('click', (e) => {
+        const link = e.target.closest('.nav-link');
+        if (link) {
+            e.preventDefault();
+            const pageId = link.getAttribute('href') ? link.getAttribute('href').substring(1) : link.dataset.page;
+            const dataId = link.dataset.id;
+            
+            showPage(pageId, dataId);
+            
+            // Fecha o menu mobile se estiver aberto
+            if (mobileMenu.classList.contains('md:hidden')) { // Verifica se não é o menu principal
+                mobileMenu.classList.add('hidden');
+            }
+        }
+    });
+
+    // Menu Mobile
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Modal de Login
+    document.getElementById('login-btn').addEventListener('click', () => loginModal.classList.add('show'));
+    document.getElementById('login-btn-mobile').addEventListener('click', () => loginModal.classList.add('show'));
+    
+    // Filtro da frota
+    categoryFilterButtons.addEventListener('click', (e) => {
+        if(e.target.tagName === 'BUTTON') {
+            const filter = e.target.dataset.filter;
+            
+            // Estilo do botão ativo
+            categoryFilterButtons.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-900');
+            });
+            e.target.classList.add('bg-blue-600', 'text-white');
+            e.target.classList.remove('bg-white', 'text-gray-900');
+            
+            if (filter === 'all') {
+                renderFleet(fullFleetGrid, db.vehicles);
+            } else {
+                renderFleet(fullFleetGrid, db.vehicles, car => car.category === filter);
+            }
+        }
+    });
+    
+    // Formulário de procura da home
+    bookingFormHome.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const category = categorySelectHome.value;
+        showPage('fleet');
+        
+        const filterButtons = categoryFilterButtons.querySelectorAll('button');
+        const targetFilter = category || 'all';
+
+        filterButtons.forEach(btn => {
+            btn.classList.remove('bg-blue-600', 'text-white');
+            btn.classList.add('bg-white', 'text-gray-900');
+            if (btn.dataset.filter === targetFilter) {
+                 btn.classList.add('bg-blue-600', 'text-white');
+                 btn.classList.remove('bg-white', 'text-gray-900');
+            }
+        });
+
+        if (category) {
+            renderFleet(fullFleetGrid, db.vehicles, car => car.category === category);
+        } else {
+            renderFleet(fullFleetGrid, db.vehicles);
+        }
+    });
+
+
+    // ---------- INICIALIZAÇÃO ----------
+    renderFleet(featuredFleetGrid, db.vehicles.slice(0, 3)); // Mostra os 3 primeiros na home
+    renderFilters();
+    // Obtém a página do hash da URL, se houver
+    const initialPage = window.location.hash ? window.location.hash.substring(1) : 'home';
+    showPage(initialPage);
+});
+</script>
+
+</body>
+</html>

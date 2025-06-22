@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Locadora Luz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo para a barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .sidebar-item.active {
+            background-color: #1d4ed8; /* blue-700 */
+            color: white;
+        }
+         .sidebar-item.active svg {
+            color: white;
+        }
+        .modal {
+            display: none; /* Oculto por padrão */
+        }
+        .modal.show {
+            display: flex; /* Exibido quando a classe 'show' é adicionada */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="flex h-screen bg-gray-200">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-gray-800 text-white p-5 flex flex-col justify-between absolute sm:relative md:absolute lg:relative transform -translate-x-full sm:translate-x-0 transition-transform duration-200 ease-in-out z-20">
+            <div>
+                <div class="flex items-center space-x-4 mb-10">
+                    <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <span class="text-2xl font-bold">Locadora Luz</span>
+                </div>
+                <nav id="nav-menu">
+                    <a href="#dashboard" class="sidebar-item flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 active">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Dashboard
+                    </a>
+                    <a href="#reservas" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Reservas
+                    </a>
+                    <a href="#frota" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Frota
+                    </a>
+                    <a href="#clientes" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                       <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Clientes
+                    </a>
+                    <div id="settings-accordion">
+                        <button class="w-full flex justify-between items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700 focus:outline-none">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                Configurações
+                            </span>
+                            <svg id="accordion-icon" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="accordion-content" class="hidden pl-8">
+                             <a href="#config-loja" class="sidebar-item flex items-center py-2 px-4 mt-2 text-sm rounded transition duration-200 hover:bg-gray-700">Informações da Loja</a>
+                             <a href="#config-precos" class="sidebar-item flex items-center py-2 px-4 mt-2 text-sm rounded transition duration-200 hover:bg-gray-700">Preços e Promoções</a>
+                             <a href="#config-categorias" class="sidebar-item flex items-center py-2 px-4 mt-2 text-sm rounded transition duration-200 hover:bg-gray-700">Categorias</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="mt-10">
+                 <a href="#" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Sair
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="flex justify-between items-center p-6 bg-white border-b">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="text-gray-500 focus:outline-none sm:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <h1 id="page-title" class="text-2xl font-semibold text-gray-800 ml-4">Dashboard</h1>
+                </div>
+                 <div class="flex items-center space-x-4">
+                    <span class="text-gray-600">Olá, Carlos (Gerente)</span>
+                     <div class="relative">
+                        <img class="h-10 w-10 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=C" alt="Foto do usuário">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                
+                <!-- Páginas -->
+                <div id="dashboard" class="page-content">
+                    <!-- Cards de Resumo -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Veículos Disponíveis</p>
+                                <p id="disponiveis-count" class="text-3xl font-bold text-gray-800">12</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Veículos Alugados</p>
+                                <p id="alugados-count" class="text-3xl font-bold text-gray-800">5</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 0121 7z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Em Manutenção</p>
+                                <p id="manutencao-count" class="text-3xl font-bold text-gray-800">3</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
+                            </div>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Check-outs Hoje</p>
+                                <p class="text-3xl font-bold text-gray-800">2</p>
+                            </div>
+                             <div class="bg-red-100 p-3 rounded-full">
+                                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="frota" class="page-content hidden">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-semibold">Gestão da Frota</h2>
+                            <button id="add-vehicle-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Adicionar Veículo</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-gray-600 bg-gray-50">
+                                        <th class="p-4">Veículo</th>
+                                        <th class="p-4">Placa</th>
+                                        <th class="p-4">Categoria</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fleet-table-body" class="divide-y">
+                                    <!-- Linhas da tabela serão inseridas pelo JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reservas" class="page-content hidden">
+                     <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-6">Lista de Reservas</h2>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-gray-600 bg-gray-50">
+                                        <th class="p-4">Cliente</th>
+                                        <th class="p-4">Veículo</th>
+                                        <th class="p-4">Período</th>
+                                        <th class="p-4">Status</th>
+                                        <th class="p-4">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bookings-table-body" class="divide-y">
+                                    <!-- Linhas da tabela serão inseridas pelo JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="clientes" class="page-content hidden">
+                     <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-6">Lista de Clientes</h2>
+                        <div class="overflow-x-auto">
+                           <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-gray-600 bg-gray-50">
+                                        <th class="p-4">Nome</th>
+                                        <th class="p-4">Email</th>
+                                        <th class="p-4">Telefone</th>
+                                        <th class="p-4">Desde</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-table-body" class="divide-y">
+                                    <!-- Linhas da tabela serão inseridas pelo JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="config-loja" class="page-content hidden">
+                    <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+                        <h2 class="text-xl font-semibold mb-6">Informações da Loja</h2>
+                        <form id="store-info-form">
+                            <div class="mb-4">
+                                <label for="store-name" class="block text-gray-700 mb-2">Nome da Loja</label>
+                                <input type="text" id="store-name" class="w-full p-2 border rounded-lg" value="Locadora Luz">
+                            </div>
+                            <div class="mb-4">
+                                <label for="store-phone" class="block text-gray-700 mb-2">Telefone</label>
+                                <input type="text" id="store-phone" class="w-full p-2 border rounded-lg" value="(35) 99876-5432">
+                            </div>
+                            <div class="mb-4">
+                                <label for="store-address" class="block text-gray-700 mb-2">Endereço</label>
+                                <input type="text" id="store-address" class="w-full p-2 border rounded-lg" value="Rua das Acácias, 123 - Centro, Luz - MG">
+                            </div>
+                            <div class="mb-4">
+                                <label for="store-about" class="block text-gray-700 mb-2">Texto "Sobre Nós"</label>
+                                <textarea id="store-about" rows="4" class="w-full p-2 border rounded-lg">Somos a principal locadora de veículos da cidade de Luz, oferecendo uma frota moderna e um serviço de qualidade.</textarea>
+                            </div>
+                            <div class="text-right">
+                                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Salvar Alterações</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="config-precos" class="page-content hidden">
+                    <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+                        <h2 class="text-xl font-semibold mb-6">Configurações de Preços e Promoções</h2>
+                        <form id="pricing-form">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">Tarifas por Categoria (Diária)</h3>
+                            <div id="category-pricing-container" class="space-y-4 mb-6">
+                                <!-- Preços das categorias serão inseridos aqui -->
+                            </div>
+                             <h3 class="text-lg font-medium text-gray-800 mb-4">Descontos Progressivos</h3>
+                             <div class="space-y-4 mb-6">
+                                 <div class="flex items-center space-x-4">
+                                    <span>Para <input type="number" class="w-16 p-2 border rounded-lg" value="7"> ou mais dias, dar</span>
+                                    <input type="number" class="w-16 p-2 border rounded-lg" value="5"> % de desconto.
+                                 </div>
+                                 <div class="flex items-center space-x-4">
+                                    <span>Para <input type="number" class="w-16 p-2 border rounded-lg" value="15"> ou mais dias, dar</span>
+                                    <input type="number" class="w-16 p-2 border rounded-lg" value="10"> % de desconto.
+                                 </div>
+                             </div>
+                            <div class="text-right">
+                                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200">Salvar Alterações</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                 <div id="config-categorias" class="page-content hidden">
+                    <div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+                        <h2 class="text-xl font-semibold mb-6">Gerenciar Categorias de Veículos</h2>
+                        <ul id="category-list" class="space-y-3 mb-6">
+                            <!-- Lista de categorias será inserida aqui -->
+                        </ul>
+                        <div class="flex space-x-2">
+                             <input type="text" id="new-category-name" placeholder="Nome da nova categoria" class="flex-grow p-2 border rounded-lg">
+                             <button id="add-category-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Veículo -->
+    <div id="vehicle-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div class="p-6 border-b">
+                <h3 id="modal-title" class="text-xl font-semibold">Adicionar Novo Veículo</h3>
+            </div>
+            <form id="vehicle-form" class="p-6">
+                 <input type="hidden" id="vehicle-id">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="vehicle-model" class="block text-sm font-medium text-gray-700">Modelo</label>
+                        <input type="text" id="vehicle-model" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                    </div>
+                    <div>
+                        <label for="vehicle-plate" class="block text-sm font-medium text-gray-700">Placa</label>
+                        <input type="text" id="vehicle-plate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                    </div>
+                    <div>
+                        <label for="vehicle-category" class="block text-sm font-medium text-gray-700">Categoria</label>
+                        <select id="vehicle-category" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                            <!-- Opções de categoria serão inseridas aqui -->
+                        </select>
+                    </div>
+                     <div>
+                        <label for="vehicle-status" class="block text-sm font-medium text-gray-700">Status</label>
+                        <select id="vehicle-status" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                           <option value="Disponível">Disponível</option>
+                           <option value="Alugado">Alugado</option>
+                           <option value="Em Manutenção">Em Manutenção</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label for="vehicle-image" class="block text-sm font-medium text-gray-700">URL da Foto</label>
+                        <input type="text" id="vehicle-image" placeholder="https://placehold.co/600x400/..." class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancel-modal-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">Cancelar</button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast de Notificação -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300">
+        Operação realizada com sucesso!
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // ---------- DADOS MOCK (SIMULAÇÃO DE BANCO DE DADOS) ----------
+    let db = {
+        vehicles: [
+            { id: 1, model: 'Fiat Mobi', plate: 'QWJ-1234', category: 'Popular', status: 'Disponível', image: 'https://placehold.co/600x400/cccccc/333333?text=Fiat+Mobi' },
+            { id: 2, model: 'Hyundai HB20', plate: 'XYZ-5678', category: 'Popular', status: 'Alugado', image: 'https://placehold.co/600x400/cccccc/333333?text=Hyundai+HB20' },
+            { id: 3, model: 'Chevrolet Onix', plate: 'ABC-9876', category: 'Popular', status: 'Disponível', image: 'https://placehold.co/600x400/cccccc/333333?text=Chevrolet+Onix' },
+            { id: 4, model: 'Jeep Renegade', plate: 'DEF-5432', category: 'SUV', status: 'Disponível', image: 'https://placehold.co/600x400/cccccc/333333?text=Jeep+Renegade' },
+            { id: 5, model: 'Fiat Toro', plate: 'GHI-1098', category: 'Pick-up', status: 'Em Manutenção', image: 'https://placehold.co/600x400/cccccc/333333?text=Fiat+Toro' },
+            { id: 6, model: 'Toyota Corolla', plate: 'JKL-7654', category: 'Sedan Médio', status: 'Alugado', image: 'https://placehold.co/600x400/cccccc/333333?text=Toyota+Corolla' }
+        ],
+        customers: [
+            { id: 1, name: 'Ana Silva', email: 'ana.silva@email.com', phone: '(11) 98765-4321', memberSince: '2023-01-15' },
+            { id: 2, name: 'Bruno Costa', email: 'bruno.costa@email.com', phone: '(21) 91234-5678', memberSince: '2023-03-22' },
+            { id: 3, name: 'Carla Dias', email: 'carla.dias@email.com', phone: '(31) 95555-8888', memberSince: '2023-05-10' }
+        ],
+        bookings: [
+            { id: 1, customerId: 2, vehicleId: 2, startDate: '2025-06-20', endDate: '2025-06-25', status: 'Ativa' },
+            { id: 2, customerId: 3, vehicleId: 6, startDate: '2025-06-21', endDate: '2025-06-28', status: 'Ativa' },
+            { id: 3, customerId: 1, vehicleId: 1, startDate: '2025-07-01', endDate: '2025-07-05', status: 'Futura' }
+        ],
+        settings: {
+            categories: [
+                { id: 1, name: 'Popular', basePrice: 99.90 },
+                { id: 2, name: 'Sedan Médio', basePrice: 149.90 },
+                { id: 3, name: 'SUV', basePrice: 179.90 },
+                { id: 4, name: 'Pick-up', basePrice: 199.90 },
+            ]
+        }
+    };
+
+    // ---------- ELEMENTOS DO DOM ----------
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const pageTitle = document.getElementById('page-title');
+    const navLinks = document.querySelectorAll('.sidebar-item');
+    const pages = document.querySelectorAll('.page-content');
+    const vehicleModal = document.getElementById('vehicle-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const cancelModalBtn = document.getElementById('cancel-modal-btn');
+    const addVehicleBtn = document.getElementById('add-vehicle-btn');
+    const vehicleForm = document.getElementById('vehicle-form');
+    const fleetTableBody = document.getElementById('fleet-table-body');
+    const bookingsTableBody = document.getElementById('bookings-table-body');
+    const customersTableBody = document.getElementById('customers-table-body');
+    const storeInfoForm = document.getElementById('store-info-form');
+    const pricingForm = document.getElementById('pricing-form');
+    const toast = document.getElementById('toast');
+    
+    // Configurações
+    const categoryPricingContainer = document.getElementById('category-pricing-container');
+    const categoryList = document.getElementById('category-list');
+    const newCategoryNameInput = document.getElementById('new-category-name');
+    const addCategoryBtn = document.getElementById('add-category-btn');
+
+    // Accordion de Configurações
+    const accordionButton = document.querySelector('#settings-accordion button');
+    const accordionContent = document.getElementById('accordion-content');
+    const accordionIcon = document.getElementById('accordion-icon');
+
+    // ---------- LÓGICA DA APLICAÇÃO ----------
+
+    // Função para mostrar notificação (toast)
+    const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.remove('opacity-0', 'translate-y-20');
+        setTimeout(() => {
+            toast.classList.add('opacity-0', 'translate-y-20');
+        }, 3000);
+    };
+
+    // Navegação SPA (Single Page Application)
+    const showPage = (pageId) => {
+        pages.forEach(page => page.classList.add('hidden'));
+        const activePage = document.getElementById(pageId);
+        if(activePage) {
+            activePage.classList.remove('hidden');
+        } else {
+            document.getElementById('dashboard').classList.remove('hidden'); // fallback
+        }
+        
+        const link = document.querySelector(`a[href="#${pageId}"]`);
+        pageTitle.textContent = link ? link.textContent.trim() : 'Dashboard';
+        
+        navLinks.forEach(l => l.classList.remove('active'));
+        if (link) {
+            if (link.parentElement.id === 'accordion-content') {
+                accordionButton.classList.add('active');
+            } else {
+                link.classList.add('active');
+            }
+        } else {
+             document.querySelector('a[href="#dashboard"]').classList.add('active');
+        }
+    };
+
+    // Lida com cliques nos links de navegação
+    document.getElementById('nav-menu').addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+            e.preventDefault();
+            const pageId = link.getAttribute('href').substring(1);
+            showPage(pageId);
+            // Fecha a sidebar em telas pequenas
+            if (window.innerWidth < 640) {
+                 sidebar.classList.add('-translate-x-full');
+            }
+        }
+    });
+    
+    // Accordion
+    accordionButton.addEventListener('click', () => {
+        accordionContent.classList.toggle('hidden');
+        accordionIcon.classList.toggle('rotate-180');
+    });
+
+    // Toggle da Sidebar para mobile
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+    });
+
+    // Funções de Renderização
+    const renderFleet = () => {
+        fleetTableBody.innerHTML = '';
+        db.vehicles.forEach(v => {
+            const statusColor = v.status === 'Disponível' ? 'bg-green-100 text-green-800' : v.status === 'Alugado' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800';
+            const row = `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-4 flex items-center">
+                        <img src="${v.image}" alt="${v.model}" class="w-16 h-10 object-cover rounded-md mr-4" onerror="this.onerror=null;this.src='https://placehold.co/160x100?text=Erro'"/>
+                        <div>
+                            <p class="font-medium">${v.model}</p>
+                            <p class="text-sm text-gray-500">${v.id}</p>
+                        </div>
+                    </td>
+                    <td class="p-4">${v.plate}</td>
+                    <td class="p-4">${v.category}</td>
+                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${v.status}</span></td>
+                    <td class="p-4 space-x-2">
+                        <button class="text-blue-600 hover:text-blue-800 edit-vehicle" data-id="${v.id}">Editar</button>
+                        <button class="text-red-600 hover:text-red-800 delete-vehicle" data-id="${v.id}">Excluir</button>
+                    </td>
+                </tr>
+            `;
+            fleetTableBody.innerHTML += row;
+        });
+        updateDashboardCounts();
+    };
+
+    const renderBookings = () => {
+        bookingsTableBody.innerHTML = '';
+        db.bookings.forEach(b => {
+             const customer = db.customers.find(c => c.id === b.customerId);
+             const vehicle = db.vehicles.find(v => v.id === b.vehicleId);
+             if(!customer || !vehicle) return;
+
+             const statusColor = b.status === 'Ativa' ? 'bg-green-100 text-green-800' : b.status === 'Futura' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
+             const row = `
+                 <tr class="hover:bg-gray-50">
+                    <td class="p-4">${customer.name}</td>
+                    <td class="p-4">${vehicle.model} - ${vehicle.plate}</td>
+                    <td class="p-4">${new Date(b.startDate).toLocaleDateString()} - ${new Date(b.endDate).toLocaleDateString()}</td>
+                    <td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusColor}">${b.status}</span></td>
+                    <td class="p-4"><button class="text-blue-600 hover:text-blue-800">Detalhes</button></td>
+                 </tr>
+             `;
+             bookingsTableBody.innerHTML += row;
+        });
+    };
+    
+    const renderCustomers = () => {
+        customersTableBody.innerHTML = '';
+        db.customers.forEach(c => {
+            const row = `
+                 <tr class="hover:bg-gray-50">
+                    <td class="p-4 font-medium">${c.name}</td>
+                    <td class="p-4">${c.email}</td>
+                    <td class="p-4">${c.phone}</td>
+                    <td class="p-4">${new Date(c.memberSince).toLocaleDateString()}</td>
+                 </tr>
+            `;
+            customersTableBody.innerHTML += row;
+        });
+    };
+
+    const renderCategoryPrices = () => {
+        categoryPricingContainer.innerHTML = '';
+        db.settings.categories.forEach(cat => {
+            const el = `
+                <div class="flex items-center justify-between">
+                    <label class="text-gray-700">${cat.name}</label>
+                    <div class="flex items-center">
+                        <span class="mr-2">R$</span>
+                        <input type="number" step="0.01" class="w-24 p-2 border rounded-lg" value="${cat.basePrice.toFixed(2)}">
+                    </div>
+                </div>
+            `;
+            categoryPricingContainer.innerHTML += el;
+        });
+    };
+    
+    const renderCategories = () => {
+        categoryList.innerHTML = '';
+        const select = document.getElementById('vehicle-category');
+        select.innerHTML = '';
+
+        db.settings.categories.forEach(cat => {
+            const li = `
+                <li class="flex justify-between items-center p-2 bg-gray-50 rounded-lg">
+                    <span>${cat.name}</span>
+                    <button data-id="${cat.id}" class="delete-category-btn text-red-500 hover:text-red-700">Excluir</button>
+                </li>
+            `;
+            categoryList.innerHTML += li;
+            
+            const option = `<option value="${cat.name}">${cat.name}</option>`;
+            select.innerHTML += option;
+        });
+    };
+
+    const updateDashboardCounts = () => {
+        document.getElementById('disponiveis-count').textContent = db.vehicles.filter(v => v.status === 'Disponível').length;
+        document.getElementById('alugados-count').textContent = db.vehicles.filter(v => v.status === 'Alugado').length;
+        document.getElementById('manutencao-count').textContent = db.vehicles.filter(v => v.status === 'Em Manutenção').length;
+    };
+
+
+    // Funções do Modal de Veículos
+    const openModal = (vehicle = null) => {
+        vehicleForm.reset();
+        document.getElementById('vehicle-id').value = '';
+        if (vehicle) {
+            modalTitle.textContent = 'Editar Veículo';
+            document.getElementById('vehicle-id').value = vehicle.id;
+            document.getElementById('vehicle-model').value = vehicle.model;
+            document.getElementById('vehicle-plate').value = vehicle.plate;
+            document.getElementById('vehicle-category').value = vehicle.category;
+            document.getElementById('vehicle-status').value = vehicle.status;
+            document.getElementById('vehicle-image').value = vehicle.image;
+        } else {
+            modalTitle.textContent = 'Adicionar Novo Veículo';
+        }
+        vehicleModal.classList.add('show');
+    };
+
+    const closeModal = () => {
+        vehicleModal.classList.remove('show');
+    };
+
+    addVehicleBtn.addEventListener('click', () => openModal());
+    cancelModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === vehicleModal) {
+            closeModal();
+        }
+    });
+
+    // Lógica do Formulário de Veículos (Adicionar/Editar)
+    vehicleForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('vehicle-id').value;
+        const vehicleData = {
+            model: document.getElementById('vehicle-model').value,
+            plate: document.getElementById('vehicle-plate').value,
+            category: document.getElementById('vehicle-category').value,
+            status: document.getElementById('vehicle-status').value,
+            image: document.getElementById('vehicle-image').value || `https://placehold.co/600x400/cccccc/333333?text=${document.getElementById('vehicle-model').value.replace(' ','+')}`,
+        };
+
+        if (id) { // Editando
+            const index = db.vehicles.findIndex(v => v.id == id);
+            db.vehicles[index] = { ...db.vehicles[index], ...vehicleData };
+            showToast('Veículo atualizado com sucesso!');
+        } else { // Adicionando
+            vehicleData.id = Date.now(); // ID único simples
+            db.vehicles.push(vehicleData);
+            showToast('Veículo adicionado com sucesso!');
+        }
+        
+        renderFleet();
+        closeModal();
+    });
+
+    // Lógica para Deletar/Editar Veículo
+    fleetTableBody.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-vehicle')) {
+            const id = e.target.dataset.id;
+            if (confirm('Tem certeza que deseja excluir este veículo?')) {
+                db.vehicles = db.vehicles.filter(v => v.id != id);
+                renderFleet();
+                showToast('Veículo excluído com sucesso!');
+            }
+        }
+        if (e.target.classList.contains('edit-vehicle')) {
+            const id = e.target.dataset.id;
+            const vehicle = db.vehicles.find(v => v.id == id);
+            openModal(vehicle);
+        }
+    });
+    
+    // Salvar informações da loja
+    storeInfoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Em um app real, aqui você enviaria os dados para o servidor
+        showToast('Informações da loja salvas com sucesso!');
+    });
+
+    // Salvar preços
+    pricingForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Configurações de preço salvas com sucesso!');
+    });
+    
+    // Gerenciar Categorias
+    addCategoryBtn.addEventListener('click', () => {
+        const name = newCategoryNameInput.value.trim();
+        if(name && !db.settings.categories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+            const newCategory = {
+                id: Date.now(),
+                name: name,
+                basePrice: 0.00
+            };
+            db.settings.categories.push(newCategory);
+            renderCategories();
+            renderCategoryPrices();
+            newCategoryNameInput.value = '';
+            showToast('Categoria adicionada!');
+        } else if (!name) {
+            alert('Por favor, insira um nome para a categoria.');
+        } else {
+            alert('Esta categoria já existe.');
+        }
+    });
+
+    categoryList.addEventListener('click', (e) => {
+        if(e.target.classList.contains('delete-category-btn')) {
+            const id = e.target.dataset.id;
+            // Verifica se a categoria não está em uso
+            const isInUse = db.vehicles.some(v => v.category === db.settings.categories.find(c => c.id == id).name);
+            if(isInUse) {
+                alert('Não é possível excluir esta categoria pois ela está sendo usada por um ou mais veículos.');
+                return;
+            }
+
+            if(confirm('Tem certeza que deseja excluir esta categoria?')) {
+                db.settings.categories = db.settings.categories.filter(c => c.id != id);
+                renderCategories();
+                renderCategoryPrices();
+                showToast('Categoria excluída!');
+            }
+        }
+    });
+
+
+    // ---------- INICIALIZAÇÃO ----------
+    const initialPage = window.location.hash ? window.location.hash.substring(1) : 'dashboard';
+    showPage(initialPage);
+    renderFleet();
+    renderBookings();
+    renderCustomers();
+    renderCategories(); // Preenche os selects e a lista de categorias
+    renderCategoryPrices(); // Preenche os campos de preço
+});
+</script>
+
+</body>
+</html>

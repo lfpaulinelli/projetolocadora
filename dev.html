@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Desenvolvedor - Locadora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .fira-code {
+            font-family: 'Fira Code', monospace;
+        }
+        .sidebar-item.active {
+            background-color: #be123c; /* rose-700 */
+            color: white;
+        }
+        .sidebar-item.active svg {
+            color: white;
+        }
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+        .log-error { color: #ef4444; } /* red-500 */
+        .log-warn { color: #f59e0b; } /* amber-500 */
+        .log-info { color: #3b82f6; } /* blue-500 */
+        .log-debug { color: #8b5cf6; } /* violet-500 */
+        
+        .modal {
+            display: none;
+        }
+        .modal.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300">
+
+    <div class="flex h-screen bg-gray-800">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-900 p-5 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center space-x-3 mb-10">
+                    <svg class="w-10 h-10 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.789-2.75 9.565M12 11c4.685-4.685 9.565-2.75 9.565-2.75M12 11L2.435 8.25m9.565 2.75L2.435 2.435m16.23 5.815L14.75 12m-2.75 9.565L2.435 14.75"></path></svg>
+                    <span class="text-2xl font-bold text-white">DevPanel</span>
+                </div>
+                <nav id="nav-menu">
+                    <a href="#monitor" class="sidebar-item flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700 active">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        Monitorização
+                    </a>
+                    <a href="#integrations" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Integrações (APIs)
+                    </a>
+                    <a href="#database" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
+                        Base de Dados
+                    </a>
+                    <a href="#logs" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Logs do Sistema
+                    </a>
+                     <a href="#security" class="sidebar-item flex items-center py-2.5 px-4 mt-2 rounded transition duration-200 hover:bg-gray-700">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Segurança
+                    </a>
+                </nav>
+            </div>
+            <div class="mt-10">
+                <p class="text-xs text-gray-500 text-center">v1.1.0-ai - Ambiente DEV</p>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="flex justify-between items-center p-6 bg-gray-800 border-b border-gray-700">
+                 <h1 id="page-title" class="text-2xl font-semibold text-white">Monitorização</h1>
+                 <div class="flex items-center space-x-4">
+                    <span class="text-gray-400">dev@locadora.com</span>
+                     <div class="relative">
+                        <img class="h-10 w-10 rounded-full object-cover border-2 border-rose-500" src="https://placehold.co/100x100/1F2937/E5E7EB?text=D" alt="Foto do utilizador">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-800 p-6">
+                
+                <div id="monitor" class="page-content active">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-gray-900 p-6 rounded-lg shadow-lg flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Carga do Servidor (CPU)</p>
+                                <p class="text-3xl font-bold text-white">14%</p>
+                            </div>
+                            <div class="text-green-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.373 3.373 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg></div>
+                        </div>
+                        <div class="bg-gray-900 p-6 rounded-lg shadow-lg flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Uso de Memória</p>
+                                <p class="text-3xl font-bold text-white">2.1 / 8 GB</p>
+                            </div>
+                            <div class="text-green-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg></div>
+                        </div>
+                         <div class="bg-gray-900 p-6 rounded-lg shadow-lg flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Erros (Última Hora)</p>
+                                <p class="text-3xl font-bold text-red-500">2</p>
+                            </div>
+                            <div class="text-red-500"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg></div>
+                        </div>
+                         <div class="bg-gray-900 p-6 rounded-lg shadow-lg flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-400">Status da API</p>
+                                <p class="text-3xl font-bold text-green-400">Online</p>
+                            </div>
+                            <div class="text-green-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="integrations" class="page-content">
+                    <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                        <h2 class="text-xl font-semibold mb-6 text-white">Configurações de Integração (APIs)</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label for="pagseguro-key" class="block text-gray-400 mb-2">Gateway de Pagamento (PagSeguro) - Chave API</label>
+                                <div class="flex">
+                                    <input type="password" id="pagseguro-key" class="fira-code w-full p-2 bg-gray-800 border border-gray-700 rounded-l-lg text-gray-300" value="********-****-****-****-************1234">
+                                    <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-r-lg">Ver</button>
+                                </div>
+                            </div>
+                             <div>
+                                <label for="mailgun-key" class="block text-gray-400 mb-2">Serviço de Email (Mailgun) - Chave API</label>
+                                <div class="flex">
+                                    <input type="password" id="mailgun-key" class="fira-code w-full p-2 bg-gray-800 border border-gray-700 rounded-l-lg text-gray-300" value="key-***************************5678">
+                                    <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-r-lg">Ver</button>
+                                </div>
+                            </div>
+                             <div>
+                                <label for="sms-key" class="block text-gray-400 mb-2">Serviço de SMS (Twilio) - Account SID</label>
+                                <div class="flex">
+                                    <input type="password" id="sms-key" class="fira-code w-full p-2 bg-gray-800 border border-gray-700 rounded-l-lg text-gray-300" value="AC****************************9abc">
+                                    <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-r-lg">Ver</button>
+                                </div>
+                            </div>
+                            <div class="text-right pt-4">
+                                <button class="bg-rose-600 text-white px-6 py-2 rounded-lg hover:bg-rose-700 transition duration-200">Salvar Alterações</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="database" class="page-content">
+                     <div class="bg-gray-900 p-8 rounded-lg shadow-lg">
+                        <h2 class="text-xl font-semibold mb-6 text-white">Gestão da Base de Dados</h2>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div class="border border-gray-700 rounded-lg p-6">
+                                <h3 class="font-bold text-lg mb-2 text-white">Status da Base de Dados</h3>
+                                <p class="text-gray-400">PostgreSQL 14.2</p>
+                                <p class="text-green-400 font-semibold">Conexão Ativa</p>
+                            </div>
+                            <div class="border border-gray-700 rounded-lg p-6">
+                                <h3 class="font-bold text-lg mb-2 text-white">Backups</h3>
+                                <p class="text-gray-400 mb-4">Último backup: Hoje às 03:00</p>
+                                <button class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Iniciar Backup Manual</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="logs" class="page-content">
+                    <div class="bg-black p-4 rounded-lg shadow-lg">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                             <h2 class="text-xl font-semibold text-white">Logs do Sistema em Tempo Real</h2>
+                             <button id="analyze-logs-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition duration-200 flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11.94 2.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8zM4.94 4.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8zM11.94 12.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8z M10 6a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+                                <span>✨ Analisar Logs com IA</span>
+                             </button>
+                        </div>
+                         <div id="log-content" class="h-96 overflow-y-scroll bg-gray-900 rounded p-4 fira-code text-sm">
+                            <p><span class="text-gray-500">[2025-06-22 15:10:01]</span> <span class="log-info">[INFO]</span> Server started on port 3000.</p>
+                            <p><span class="text-gray-500">[2025-06-22 15:10:05]</span> <span class="log-info">[INFO]</span> Database connection successful.</p>
+                            <p><span class="text-gray-500">[2025-06-22 15:11:23]</span> <span class="log-debug">[DEBUG]</span> User 'carlos@locadora.com' logged in.</p>
+                            <p><span class="text-gray-500">[2025-06-22 15:11:45]</span> <span class="log-debug">[DEBUG]</span> API call to GET /api/vehicles.</p>
+                            <p><span class="text-gray-500">[2025-06-22 15:12:10]</span> <span class="log-warn">[WARN]</span> Payment gateway API response time is slow: 2500ms.</p>
+                            <p><span class="text-gray-500">[2025-06-22 15:12:30]</span> <span class="log-error">[ERROR]</span> Failed to process payment for booking #54321: Card declined.</p>
+                             <p><span class="text-gray-500">[2025-06-22 15:12:31]</span> <span class="log-info">[INFO]</span> Email sent to customer about payment failure.</p>
+                             <p><span class="text-gray-500">[2025-06-22 15:13:02]</span> <span class="log-error">[ERROR]</span> Cannot read properties of null (reading 'vehicleId'). Stack: at processBooking (line 152, col 25)</p>
+                         </div>
+                    </div>
+                </div>
+                
+                <div id="security" class="page-content">
+                     <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+                        <h2 class="text-xl font-semibold mb-6 text-white">Configurações de Segurança</h2>
+                        <div class="space-y-6">
+                             <div>
+                                <h3 class="text-lg text-gray-200">Certificado SSL</h3>
+                                <div class="bg-gray-800 p-4 rounded-lg mt-2 border border-gray-700">
+                                    <p class="text-green-400 font-bold">ATIVO</p>
+                                    <p class="text-sm text-gray-400">Emitido por: Let's Encrypt</p>
+                                    <p class="text-sm text-gray-400">Expira em: 85 dias</p>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg text-gray-200">Firewall da Aplicação Web (WAF)</h3>
+                                <div class="bg-gray-800 p-4 rounded-lg mt-2 border border-gray-700 flex justify-between items-center">
+                                    <p class="text-green-400 font-bold">ATIVO</p>
+                                    <p class="text-sm text-gray-400">A bloquear pedidos maliciosos.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- AI Analysis Modal -->
+    <div id="ai-analysis-modal" class="modal fixed inset-0 bg-black bg-opacity-70 items-center justify-center p-4 z-50">
+        <div class="bg-gray-900 rounded-lg shadow-xl w-full max-w-2xl border border-gray-700">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 class="text-lg font-semibold text-white flex items-center">
+                    <svg class="w-5 h-5 mr-3 text-indigo-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11.94 2.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8zM4.94 4.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8zM11.94 12.97c.43-.23.96-.02 1.19.4l.8 1.39c.23.4.02.93-.4 1.16l-1.39.8c-.43.23-.96.02-1.19-.4l-.8-1.39c-.23-.4-.02-.93.4-1.16l1.39-.8z M10 6a4 4 0 100 8 4 4 0 000-8z"></path></svg>
+                    Análise dos Logs com Gemini
+                </h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6">
+                <div id="loading-indicator" class="text-center">
+                    <p class="text-lg text-gray-300">A analisar... Por favor, aguarde.</p>
+                </div>
+                <div id="analysis-result" class="hidden prose prose-invert prose-sm max-w-none">
+                    <!-- O resultado da análise será inserido aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const pageTitle = document.getElementById('page-title');
+    const navLinks = document.querySelectorAll('.sidebar-item');
+    const pages = document.querySelectorAll('.page-content');
+    
+    // Elementos da nova funcionalidade de IA
+    const analyzeLogsBtn = document.getElementById('analyze-logs-btn');
+    const aiAnalysisModal = document.getElementById('ai-analysis-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const logContent = document.getElementById('log-content');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const analysisResult = document.getElementById('analysis-result');
+
+
+    // Navegação SPA (Single Page Application)
+    const showPage = (pageId) => {
+        pages.forEach(page => page.classList.remove('active'));
+        const activePage = document.getElementById(pageId);
+        if (activePage) {
+            activePage.classList.add('active');
+        } else {
+            document.getElementById('monitor').classList.add('active'); // fallback
+        }
+        
+        const link = document.querySelector(`a[href="#${pageId}"]`);
+        pageTitle.textContent = link ? link.textContent.trim() : 'Monitorização';
+        
+        navLinks.forEach(l => l.classList.remove('active'));
+        if(link) {
+            link.classList.add('active');
+        } else {
+            document.querySelector('a[href="#monitor"]').classList.add('active');
+        }
+    };
+
+    document.getElementById('nav-menu').addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+            e.preventDefault();
+            const pageId = link.getAttribute('href').substring(1);
+            showPage(pageId);
+        }
+    });
+
+    // --- Funcionalidade de Análise de Logs com Gemini ---
+
+    const openModal = () => aiAnalysisModal.classList.add('show');
+    const closeModal = () => aiAnalysisModal.classList.remove('show');
+
+    closeModalBtn.addEventListener('click', closeModal);
+    aiAnalysisModal.addEventListener('click', (e) => {
+        if (e.target === aiAnalysisModal) {
+            closeModal();
+        }
+    });
+
+    analyzeLogsBtn.addEventListener('click', async () => {
+        // 1. Mostrar modal e estado de carregamento
+        openModal();
+        loadingIndicator.style.display = 'block';
+        analysisResult.classList.add('hidden');
+        analysisResult.innerHTML = '';
+        
+        // 2. Obter conteúdo dos logs
+        const logs = logContent.innerText;
+        
+        // 3. Preparar e chamar a API Gemini
+        const prompt = `
+            Você é um engenheiro de software sénior especialista em análise de logs e debugging.
+            Analise os seguintes logs de um sistema de uma locadora de veículos.
+            
+            Forneça uma resposta clara e concisa em Português do Brasil, formatada em Markdown, com as seguintes secções:
+            
+            1.  **Resumo Geral:** Uma visão geral do que está a acontecer.
+            2.  **Erros Críticos:** Uma lista dos erros mais importantes encontrados. Para cada erro, explique a possível causa raiz.
+            3.  **Avisos Importantes:** Destaque quaisquer avisos que possam indicar problemas futuros.
+            4.  **Sugestões e Próximos Passos:** Ações recomendadas para corrigir os erros e melhorar o sistema.
+            
+            Logs para analisar:
+            ---
+            ${logs}
+            ---
+        `;
+
+        try {
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // A API Key será fornecida pelo ambiente de execução
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            
+            let analysisText = "Não foi possível obter uma análise. Tente novamente.";
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                analysisText = result.candidates[0].content.parts[0].text;
+            }
+
+            // 4. Exibir o resultado
+            loadingIndicator.style.display = 'none';
+            // Simplificando a renderização - usando <pre> para manter a formatação do markdown
+            analysisResult.innerHTML = `<pre class="whitespace-pre-wrap fira-code text-gray-300">${analysisText}</pre>`;
+            analysisResult.classList.remove('hidden');
+
+        } catch (error) {
+            console.error('Error calling Gemini API:', error);
+            loadingIndicator.style.display = 'none';
+            analysisResult.innerHTML = `<p class="text-red-500">Ocorreu um erro ao contactar a IA. Por favor, verifique a consola para mais detalhes.</p>`;
+            analysisResult.classList.remove('hidden');
+        }
+    });
+
+
+    // Inicialização
+    const initialPage = window.location.hash ? window.location.hash.substring(1) : 'monitor';
+    showPage(initialPage);
+});
+</script>
+
+</body>
+</html>
